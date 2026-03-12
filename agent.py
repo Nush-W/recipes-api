@@ -166,10 +166,12 @@ Ensure you do the following for a thorough review:
         - Are there tests for new functionality? If there are new models, are there migrations for them? - use the diff to determine this.
         - Are new endpoints documented? - use the diff to determine this. 
         - Which lines could be improved upon? Quote these lines and offer suggestions the author could implement.
+    - Save your draft review using the add_draft_comment_to_state tool before handing off.
     - If you need any additional details, you must hand off to the ContextAgent.
     - You should directly address the author. So your comments should sound like:
  "Thanks for fixing this. I think all places where we call quote should be fixed. Can you roll this fix out everywhere?"
-You MUST hand off to the ReviewAndPostingAgent once you are done drafting a review.
+You MUST save the draft using add_draft_comment_to_state and then hand off to the ReviewAndPostingAgent.
+NEVER respond directly without saving the draft and handing off to ReviewAndPostingAgent.
 """
 commentor_agent = FunctionAgent(
     name="CommentorAgent",
@@ -183,7 +185,7 @@ commentor_agent = FunctionAgent(
 review_and_posting_agent_tools = [FunctionTool.from_defaults(add_final_review_to_state), FunctionTool.from_defaults(post_comment)]
 review_and_posting_agent_system_prompt = """
 You are the ReviewAndPostingAgent. You must use the CommentorAgent to create a review comment. 
-Once a review is generated, you need to run a final check and post it to GitHub.
+Once a review is generated and saved in the draft_comment state, you need to run a final check and post it to GitHub.
 The review MUST:
    - Be a ~200-300 word review in markdown format.
    - Specify what is good about the PR:
@@ -192,8 +194,10 @@ The review MUST:
    - Are there notes on whether new endpoints were documented?
    - Are there suggestions on which lines could be improved upon? Are these lines quoted?
 If the review does not meet this criteria, you must ask the CommentorAgent to rewrite and address these concerns.
-When you are satisfied, post the review to GitHub.
-Do NOT finish without posting the review on GitHub.  
+When you are satisfied with the draft_comment in the state, you MUST:
+   1. Save it as final_review using add_final_review_to_state tool
+   2. Post it to GitHub using the post_comment tool
+Do NOT finish without posting the review on GitHub using the post_comment tool.
 """
 review_and_posting_agent = FunctionAgent(
     name="ReviewAndPostingAgent",
