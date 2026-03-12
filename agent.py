@@ -125,7 +125,7 @@ def post_comment(pr_no: int, comment: str) -> str:
     try:
         repo = git.get_repo(repository)
         pr = repo.get_pull(pr_no)
-        pr.create_review(body=comment)
+        pr.create_review(body=comment, event="COMMENT")
         return "Successfully posted a comment on GitHub"
     except (GithubException, Exception) as e:
         return f"Error posting PR comment to GitHub: {e}"
