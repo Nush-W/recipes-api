@@ -192,7 +192,8 @@ The review MUST:
    - Are there notes on whether new endpoints were documented?
    - Are there suggestions on which lines could be improved upon? Are these lines quoted?
 If the review does not meet this criteria, you must ask the CommentorAgent to rewrite and address these concerns.
-When you are satisfied, post the review to GitHub.  
+When you are satisfied, post the review to GitHub.
+Do NOT finish without posting the review on GitHub.  
 """
 review_and_posting_agent = FunctionAgent(
     name="ReviewAndPostingAgent",
